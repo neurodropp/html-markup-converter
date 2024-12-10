@@ -120,3 +120,24 @@ function updateOutput() {
     const formattedContent = formatHTML(cleanContent);
     document.getElementById('output').value = formattedContent;
 }
+
+// Copy to clipboard functionality
+document.getElementById('copyButton').addEventListener('click', async () => {
+    const outputText = document.getElementById('output').value;
+    try {
+        await navigator.clipboard.writeText(outputText);
+        const button = document.getElementById('copyButton');
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.style.backgroundColor = '#333333';
+        
+        // Reset button text after 2 seconds
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = '#000000';
+        }, 2000);
+    } catch (err) {
+        console.error('Failed to copy text: ', err);
+        alert('Failed to copy text to clipboard');
+    }
+});
