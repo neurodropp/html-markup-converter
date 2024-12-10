@@ -4,14 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Markup Converter</title>
-    <script src="config.js"></script>
-    <script>
-        // Dynamically create TinyMCE script tag with API key
-        const tinyScript = document.createElement('script');
-        tinyScript.src = `https://cdn.tiny.cloud/1/${TINYMCE_API_KEY}/tinymce/6/tinymce.min.js`;
-        tinyScript.referrerPolicy = 'origin';
-        document.head.appendChild(tinyScript);
-    </script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
     <style>
         body {
             max-width: 1200px;
@@ -39,6 +32,9 @@
             text-align: center;
             color: #333;
         }
+        .ck-editor__editable {
+            min-height: 500px;
+        }
     </style>
 </head>
 <body>
@@ -46,10 +42,10 @@
     <div class="container">
         <div class="editor-container">
             <h2>Editor</h2>
-            <textarea id="editor"></textarea>
+            <div id="editor"></div>
         </div>
         <div class="output-container">
-            <h2>HTML Output</h2>
+            <h2>Clean HTML Output</h2>
             <textarea id="output" readonly></textarea>
         </div>
     </div>
