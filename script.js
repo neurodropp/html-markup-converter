@@ -4,7 +4,7 @@ ClassicEditor
     .then(editor => {
         // Add real-time update on content change
         editor.model.document.on('change:data', () => {
-            updateOutput();
+            updateOutputFromEditor();
         });
 
         // Store editor instance globally
@@ -67,16 +67,17 @@ function formatHTML(html) {
     // Function to format a node
     function formatNode(node) {
         if (node.nodeType === 3) { // Text node
-            const text = node.textContent.trim();
+            const text = node.textContent;
             if (text) {
+                // Preserve the exact text content including spaces
                 formatted += text;
             }
         } else if (node.nodeType === 1) { // Element node
             const tagName = node.tagName.toLowerCase();
             
             // Add newline and indentation before opening tag
-            if (formatted) {
-                addNewLine();
+            if (tagName === 'p' || tagName === 'div') {
+                if (formatted) addNewLine();
             }
             
             // Add opening tag
@@ -89,16 +90,16 @@ function formatHTML(html) {
             
             formatted += '>';
             
-            // Handle children
-            if (node.children.length > 0) {
-                indent++;
-                Array.from(node.children).forEach(child => {
+            // Handle children and text content
+            if (node.childNodes.length > 0) {
+                if (tagName === 'p' || tagName === 'div') indent++;
+                Array.from(node.childNodes).forEach(child => {
                     formatNode(child);
                 });
-                indent--;
-                addNewLine();
-            } else if (node.textContent.trim()) {
-                formatted += node.textContent.trim();
+                if (tagName === 'p' || tagName === 'div') {
+                    indent--;
+                    addNewLine();
+                }
             }
             
             // Add closing tag
@@ -106,7 +107,7 @@ function formatHTML(html) {
         }
     }
 
-    // Format each child node
+    // Format each root node
     Array.from(temp.childNodes).forEach(node => {
         formatNode(node);
     });
@@ -114,12 +115,23 @@ function formatHTML(html) {
     return formatted;
 }
 
-function updateOutput() {
-    const content = window.editor.getData();
-    const cleanContent = cleanHTML(content);
-    const formattedContent = formatHTML(cleanContent);
-    document.getElementById('output').value = formattedContent;
+// Function to update output from editor changes
+function updateOutputFromEditor() {
+    const data = window.editor.getData();
+    const formattedHTML = formatHTML(data);
+    document.getElementById('output').value = formattedHTML;
+    updatePreview();
 }
+
+// Function to update the preview
+function updatePreview() {
+    const outputText = document.getElementById('output').value;
+    const previewElement = document.getElementById('preview');
+    previewElement.innerHTML = outputText;
+}
+
+// Add event listener for output textarea changes
+document.getElementById('output').addEventListener('input', updatePreview);
 
 // Copy to clipboard functionality
 document.getElementById('copyButton').addEventListener('click', async () => {
@@ -129,15 +141,10 @@ document.getElementById('copyButton').addEventListener('click', async () => {
         const button = document.getElementById('copyButton');
         const originalText = button.textContent;
         button.textContent = 'Copied!';
-        button.style.backgroundColor = '#333333';
-        
-        // Reset button text after 2 seconds
         setTimeout(() => {
             button.textContent = originalText;
-            button.style.backgroundColor = '#000000';
         }, 2000);
     } catch (err) {
         console.error('Failed to copy text: ', err);
-        alert('Failed to copy text to clipboard');
     }
 });

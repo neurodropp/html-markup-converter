@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Markup Converter</title>
+    <title>Neurodrop's HTML Markup Converter</title>
     <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
     <style>
         body {
@@ -53,6 +53,11 @@
             text-align: center;
             color: #333;
         }
+        .description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
         .button-container {
             margin-top: 10px;
         }
@@ -69,10 +74,37 @@
         .copy-button:hover {
             background-color: #333333;
         }
+        .preview-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        #preview {
+            width: 100%;
+            min-height: 200px;
+            padding: 20px;
+            background-color: white;
+        }
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+            color: #666;
+        }
+        footer a {
+            color: #333;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <h1>HTML Markup Converter</h1>
+    <p class="description">A simple tool for the friend <a href="https://www.pistakkio.net/" target="_blank">Pistakkio</a></p>
     <div class="container">
         <div class="editor-container">
             <h2>Editor</h2>
@@ -80,12 +112,19 @@
         </div>
         <div class="output-container">
             <div class="title-container">
-                <h2>Clean HTML Output</h2>
+                <h2>HTML Output</h2>
                 <button id="copyButton" class="copy-button">Copy to Clipboard</button>
             </div>
-            <textarea id="output" readonly></textarea>
+            <textarea id="output"></textarea>
         </div>
     </div>
+    <div class="preview-container">
+        <h2>Preview of HTML output</h2>
+        <div id="preview"></div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Neurodrop. Contact us at <a href="mailto:marco@neurodrop.it">marco@neurodrop.it</a></p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
